@@ -143,12 +143,12 @@ export class AutoComplete {
   private convertSelectToText() {
     // create hidden field
 
+    const selected: HTMLOptionElement = this._el.querySelector('[selected]');
+
     const hidField: JQuery = $('<input>');
     hidField.attr('type', 'hidden');
     hidField.attr('name', this._$el.attr('name'));
-    if (this._defaultValue) {
-      hidField.val(this._defaultValue);
-    }
+
     this._selectHiddenField = hidField;
 
     hidField.insertAfter(this._$el);
@@ -163,8 +163,17 @@ export class AutoComplete {
     searchField.attr('placeholder', this._$el.attr('placeholder'));
     searchField.attr('autocomplete', 'off');
     searchField.addClass(this._$el.attr('class'));
-    if (this._defaultText) {
-      searchField.val(this._defaultText);
+
+    if (selected) {
+      hidField.val(selected.value);
+      searchField.val(selected.text);
+    } else {
+      if (this._defaultValue) {
+        hidField.val(this._defaultValue);
+      }
+      if (this._defaultText) {
+        searchField.val(this._defaultText);
+      }
     }
 
     const requiredAttribute: string = this._$el.attr('required');
