@@ -157,7 +157,6 @@ export class AutoComplete {
     const searchField: JQuery = $('<input>');
     // copy all attributes
     searchField.attr('type', 'search');
-    searchField.attr('name', this._$el.attr('name') + '_text');
     searchField.attr('id', this._$el.attr('id'));
     searchField.attr('disabled', this._$el.attr('disabled'));
     searchField.attr('placeholder', this._$el.attr('placeholder'));
