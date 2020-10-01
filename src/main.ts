@@ -438,7 +438,7 @@ export class AutoComplete {
   private defaultFormatResult(item: any): {} {
     if (typeof item === 'string') {
       return { text: item };
-    } else if (item.text) {
+    } else if ('text' in item) {
       return item;
     } else {
       // return a toString of the item as last resort
