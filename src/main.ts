@@ -155,11 +155,17 @@ export class AutoComplete {
 
     // create search input element
     const searchField: JQuery = $('<input>');
+
     // copy all attributes
     searchField.attr('type', 'search');
-    searchField.attr('id', this._$el.attr('id'));
-    searchField.attr('disabled', this._$el.attr('disabled'));
-    searchField.attr('placeholder', this._$el.attr('placeholder'));
+    searchField.attr('name', this._$el.attr('name') + '_text');
+    Array.prototype.forEach.call(this._el.attributes, (attr: Attr) => {
+      // Name is needed for hidden input
+      if (attr.name !== 'name') {
+        searchField.attr(attr.name, attr.value);
+      }
+    });
+
     searchField.attr('autocomplete', 'off');
     searchField.addClass(this._$el.attr('class'));
 
