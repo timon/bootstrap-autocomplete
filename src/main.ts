@@ -34,8 +34,8 @@ export interface AutoCompleteSettings {
   bootstrapVersion: string,
   preventEnter: boolean,
   events: {
-    typed: (newValue: string, el: JQuery<HTMLElement>) => string,
-    searchPre: (searchText: string, el: JQuery<HTMLElement>) => string,
+    typed: (newValue: string, el: JQuery<HTMLElement>) => string|false,
+    searchPre: (searchText: string, el: JQuery<HTMLElement>) => string|false,
     search: (searchText: string, cbk: (results: any) => void, el: JQuery<HTMLElement>) => void,
     searchPost: (results: any, el: JQuery<HTMLElement>) => any,
     select: () => void,
@@ -155,6 +155,7 @@ export class AutoComplete {
 
     // create search input element
     const searchField: JQuery = $('<input>');
+
     // copy all attributes
     searchField.attr('type', 'search');
     searchField.attr('name', this._$el.attr('name') + '_text');
@@ -342,12 +343,14 @@ export class AutoComplete {
   private handlerTyped(newValue: string): void {
     // field value changed
 
-    // custom handler may change newValue
+    // custom handler may change newValue or prevent the search by returning false
     if (this._settings.events.typed !== null) {
-      newValue = this._settings.events.typed(newValue, this._$el);
-      if (!newValue) {
+      const afterCallback: string|false = this._settings.events.typed(newValue, this._$el);
+      if (afterCallback === false) {
         return;
       }
+
+      newValue = afterCallback;
     }
 
     // if value >= minLength, start autocomplete
@@ -364,8 +367,8 @@ export class AutoComplete {
 
     // custom handler may change newValue
     if (this._settings.events.searchPre !== null) {
-      const newValue: string = this._settings.events.searchPre(this._searchText, this._$el);
-      if (!newValue)
+      const newValue: string|false = this._settings.events.searchPre(this._searchText, this._$el);
+      if (newValue === false)
         return;
       this._searchText = newValue;
     }
