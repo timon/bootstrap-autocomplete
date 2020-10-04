@@ -160,7 +160,6 @@ export class AutoComplete {
 
     // copy all attributes
     searchField.attr('type', 'search');
-    searchField.attr('name', this._$el.attr('name') + '_text');
     Array.prototype.forEach.call(this._el.attributes, (attr: Attr) => {
       // Name is needed for hidden input
       if (attr.name !== 'name') {
