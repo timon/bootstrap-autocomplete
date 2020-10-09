@@ -76,7 +76,7 @@ export class AjaxResolver extends BaseResolver {
       this.jqXHR.fail((err) => {
         // console.log(err);
         // this._settings.fail && this._settings.fail(err);
-        this._settings?.fail(err);
+        this._settings?.fail?.(err);
       });
 
       this.jqXHR.always(() => {
