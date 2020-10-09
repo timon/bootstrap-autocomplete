@@ -433,6 +433,7 @@ export class AutoComplete {
     this._selectedItem = item;
     // and hide
     this._dd.hide();
+    this._$el.trigger('change');
   }
 
   private defaultFormatResult(item: any): {} {
