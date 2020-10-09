@@ -33,6 +33,7 @@ export interface AutoCompleteSettings {
   noResultsText: string,
   bootstrapVersion: string,
   preventEnter: boolean,
+  swallowKeys: boolean,
   events: {
     typed: (newValue: string, el: JQuery<HTMLElement>) => string,
     searchPre: (searchText: string, el: JQuery<HTMLElement>) => string,
@@ -66,6 +67,7 @@ export class AutoComplete {
     noResultsText: 'No results',
     bootstrapVersion: 'auto',
     preventEnter: false,
+    swallowKeys: false,
     events: {
       typed: null,
       searchPre: null,
@@ -225,16 +227,24 @@ export class AutoComplete {
         case 13: // ENTER
           if (this._dd.isItemFocused) {
             this._dd.selectFocusItem();
+            if (this._settings.swallowKeys) return false;
           } else if (!this._selectedItem) {
             if (this._$el.val() !== '') {
               this._$el.trigger('autocomplete.freevalue', this._$el.val());
             }
           }
-          this._dd.hide();
+          if (this._dd.isShown()) {
+            this._dd.hide();
+            if (this._settings.swallowKeys) return false;
+          }
           if (this._settings.preventEnter) {
             // console.log('preventDefault');
             evt.preventDefault();
           }
+          break;
+        case 27:
+          if (this._dd.isShown() && this._settings.swallowKeys)
+            return false;
           break;
         case 40:
           // arrow DOWN (here for usability - issue #80)
@@ -260,11 +270,21 @@ export class AutoComplete {
           break;
         case 13:
           // ENTER
-          this._dd.hide();
+          if (this._dd.isShown()) {
+            this._dd.hide();
+
+            if (this._settings.swallowKeys)
+              return false;
+          }
           break;
         case 27:
           // ESC
-          this._dd.hide();
+          if (this._dd.isShown()) {
+            this._dd.hide();
+
+            if (this._settings.swallowKeys)
+              return false;
+          }
           break;
         case 40:
           // arrow DOWN
