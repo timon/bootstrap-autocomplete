@@ -126,6 +126,7 @@ export class DropdownV4 {
 
       currElem.removeClass('active');
       nextElem.addClass('active');
+      this.scrollTo(nextElem);
     }
   }
 
@@ -244,4 +245,24 @@ export class DropdownV4 {
     this._$el.trigger('autocomplete.select', item)
   }
 
+  private scrollTo(item: JQuery): void {
+    const height: number = this._dd.height();
+    const top: number = this._dd.scrollTop();
+    // itemOfft is current offset with respsect to scroll position
+    const itemOfft: number = item.position().top;
+    const itemHeight: number = item.outerHeight();
+
+    let newOfft = top;
+    let wrapped: boolean;
+
+    if (itemOfft < 0) {
+      wrapped = item.is(':first-child');
+      newOfft = wrapped ? 0 : top - height / 2;
+    } else if (itemOfft > height - itemHeight) {
+      wrapped = item.is(':last-child') && itemOfft > height;
+      newOfft = wrapped ? (itemOfft + itemHeight - height) : top + height / 2;
+    }
+
+    this._dd.scrollTop(newOfft);
+  }
 }
