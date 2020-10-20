@@ -144,6 +144,7 @@ export class AutoComplete {
     // create hidden field
 
     const selected: HTMLOptionElement = this._el.querySelector('[selected]');
+    this._selectedItem = selected;
 
     const hidField: JQuery = $('<input>');
     hidField.attr('type', 'hidden');
