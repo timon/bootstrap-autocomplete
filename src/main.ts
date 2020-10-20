@@ -456,7 +456,8 @@ export class AutoComplete {
       this.itemSelectedDefaultHandler(null);
     } else if (APICmd === 'show') {
       // shortcut
-      this._$el.trigger('keyup');
+      // Don't trigger keyup because this will reset selected item
+      this.handlerTyped(this._$el.val() as string);
     } else if (APICmd === 'updateResolver') {
       // update resolver
       this.resolver = new AjaxResolver(params);
